@@ -14,4 +14,29 @@ public class RequestQueue {
         this.rear = -1;
         this.size = 0;
     }
+
+    public void enqueue(String packetId) {
+        if (size == capacity) {
+            System.out.println("Queue Full: Cannot enqueue " + packetId);
+            return;
+        }
+        rear = (rear + 1) % capacity;
+        queueArray[rear] = packetId;
+        size++;
+    }
+
+    public String dequeue() {
+        if (isEmpty()) {
+            System.out.println("Queue Empty");
+            return null;
+        }
+        String item = queueArray[front];
+        front = (front + 1) % capacity;
+        size--;
+        return item;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
 }
