@@ -14,11 +14,17 @@ public class InventoryCatalogApp {
         System.out.println("=== E-Commerce Inventory Catalog Concurrency Benchmark ===");
         InventoryCatalogManager manager = new InventoryCatalogManager(TOTAL_ITEMS);
 
-        benchmarkSynchronizedMap(manager);
-        benchmarkConcurrentMap(manager);
+        double syncTime = benchmarkSynchronizedMap(manager);
+        double concurrentTime = benchmarkConcurrentMap(manager);
+
+        System.out.println("\n--- Concurrency Performance Summary ---");
+        System.out.printf("SynchronizedMap Execution Time: %.3f ms\n", syncTime);
+        System.out.printf("ConcurrentHashMap Execution Time: %.3f ms\n", concurrentTime);
+        System.out.printf("Fine-grained Bucket Locking Speedup: %.2fx faster\n", (syncTime / concurrentTime));
+        System.out.println("=========================================================");
     }
 
-    private static void benchmarkSynchronizedMap(InventoryCatalogManager manager) throws InterruptedException {
+    private static double benchmarkSynchronizedMap(InventoryCatalogManager manager) throws InterruptedException {
         Map<String, Integer> syncCatalog = manager.createSynchronizedMap();
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
@@ -37,15 +43,18 @@ public class InventoryCatalogApp {
         executor.awaitTermination(1, TimeUnit.MINUTES);
         long durationNs = System.nanoTime() - startTime;
 
+        double timeMs = durationNs / 1e6;
         double seconds = durationNs / 1e9;
         double throughput = (THREAD_POOL_SIZE * OPS_PER_THREAD) / seconds;
 
         System.out.println("\n--- Collections.synchronizedMap Benchmark ---");
-        System.out.printf("Total Execution Time: %.3f ms\n", durationNs / 1e6);
+        System.out.printf("Total Execution Time: %.3f ms\n", timeMs);
         System.out.printf("Throughput: %.2f ops/sec\n", throughput);
+
+        return timeMs;
     }
 
-    private static void benchmarkConcurrentMap(InventoryCatalogManager manager) throws InterruptedException {
+    private static double benchmarkConcurrentMap(InventoryCatalogManager manager) throws InterruptedException {
         Map<String, Integer> concurrentCatalog = manager.createConcurrentMap();
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
 
@@ -64,11 +73,14 @@ public class InventoryCatalogApp {
         executor.awaitTermination(1, TimeUnit.MINUTES);
         long durationNs = System.nanoTime() - startTime;
 
+        double timeMs = durationNs / 1e6;
         double seconds = durationNs / 1e9;
         double throughput = (THREAD_POOL_SIZE * OPS_PER_THREAD) / seconds;
 
         System.out.println("\n--- ConcurrentHashMap Benchmark ---");
-        System.out.printf("Total Execution Time: %.3f ms\n", durationNs / 1e6);
+        System.out.printf("Total Execution Time: %.3f ms\n", timeMs);
         System.out.printf("Throughput: %.2f ops/sec\n", throughput);
+
+        return timeMs;
     }
 }
