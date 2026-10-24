@@ -8,6 +8,12 @@ public class LogProcessorTask implements Runnable {
     public void run() {
         for (int i = 1; i <= iterations; i++) {
             System.out.println("[" + Thread.currentThread().getName() + "] Log Metric Iteration: " + i + "/5");
+            try {
+                Thread.sleep(sleepDurationMs);
+            } catch (InterruptedException e) {
+                System.err.println("[" + Thread.currentThread().getName() + "] Interrupted: " + e.getMessage());
+                Thread.currentThread().interrupt();
+            }
         }
     }
 }
