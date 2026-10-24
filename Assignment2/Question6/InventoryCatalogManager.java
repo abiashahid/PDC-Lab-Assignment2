@@ -27,4 +27,11 @@ public class InventoryCatalogManager {
         }
         return map;
     }
+
+    public void executeCatalogTransaction(Map<String, Integer> map, String productId) {
+        Integer currentStock = map.get(productId);
+        if (currentStock != null) {
+            map.put(productId, currentStock + 1);
+        }
+    }
 }
