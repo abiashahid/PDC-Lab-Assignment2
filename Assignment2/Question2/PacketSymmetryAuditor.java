@@ -15,6 +15,15 @@ public class PacketSymmetryAuditor {
             queue.enqueue(outgoingPackets[i]);
         }
 
+        while (!stack.isEmpty() && !queue.isEmpty()) {
+            String stackPacket = stack.pop();
+            String queuePacket = queue.dequeue();
+
+            if (!stackPacket.equals(queuePacket)) {
+                return false;
+            }
+        }
+
         return true;
     }
 }
