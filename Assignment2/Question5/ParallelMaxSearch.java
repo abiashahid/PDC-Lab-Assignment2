@@ -13,6 +13,13 @@ public class ParallelMaxSearch extends SensorSearchEngine {
 
     @Override
     public double processGrid() {
-        return 0.0;
+        double max = -Double.MAX_VALUE;
+        for (int i = startIdx; i < endIdx; i++) {
+            if (sensorData[i] > max) {
+                max = sensorData[i];
+            }
+        }
+        this.resultMax = max;
+        return max;
     }
 }
