@@ -18,6 +18,11 @@ public class CacheLocalityBenchmark {
         System.out.printf("Column-Major Access Time: %.3f ms\n", colMajorTime / 1e6);
 
         logMemoryFootprint();
+
+        double ratio = (double) colMajorTime / rowMajorTime;
+        System.out.println("\n--- Hardware Cache Locality Analysis ---");
+        System.out.printf("Cache Miss Stalling Penalty: Row-Major is %.2fx FASTER\n", ratio);
+        System.out.println("=====================================================");
     }
 
     private static void logMemoryFootprint() {
@@ -46,6 +51,7 @@ public class CacheLocalityBenchmark {
             }
         }
         long duration = System.nanoTime() - startTime;
+        if (sum < 0) System.out.println(sum); // Uses variable to clear IDE warning
         return duration;
     }
 
@@ -58,6 +64,7 @@ public class CacheLocalityBenchmark {
             }
         }
         long duration = System.nanoTime() - startTime;
+        if (sum < 0) System.out.println(sum); // Uses variable to clear IDE warning
         return duration;
     }
 }
