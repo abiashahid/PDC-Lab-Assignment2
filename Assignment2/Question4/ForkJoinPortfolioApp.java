@@ -1,6 +1,7 @@
 package Assignment2.Question4;
 
 import java.util.Random;
+import java.util.concurrent.ForkJoinPool;
 
 public class ForkJoinPortfolioApp {
     private static final int ASSET_COUNT = 10000;
@@ -16,5 +17,19 @@ public class ForkJoinPortfolioApp {
         }
         
         System.out.println("Generated " + ASSET_COUNT + " synthetic asset values.");
+
+        ForkJoinPool pool = new ForkJoinPool();
+
+        // Phase 1: Parallel Cumulative Risk Calculation
+        long startTime = System.nanoTime();
+        ParallelRiskCalculator riskTask = new ParallelRiskCalculator(assets, 0, assets.length);
+        double initialRiskScore = pool.invoke(riskTask);
+        long riskCalcTime = System.nanoTime() - startTime;
+
+        System.out.printf("\n--- Phase 1: Cumulative Risk Assessment ---\n");
+        System.out.printf("Calculated Total Risk Score: $%.2f\n", initialRiskScore);
+        System.out.printf("Execution Time: %.3f ms\n", riskCalcTime / 1e6);
+
+        pool.close();
     }
 }
