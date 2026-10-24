@@ -13,6 +13,13 @@ public class ParallelMinSearch extends SensorSearchEngine {
 
     @Override
     public double processGrid() {
-        return 0.0;
+        double min = Double.MAX_VALUE;
+        for (int i = startIdx; i < endIdx; i++) {
+            if (sensorData[i] < min) {
+                min = sensorData[i];
+            }
+        }
+        this.resultMin = min;
+        return min;
     }
 }
