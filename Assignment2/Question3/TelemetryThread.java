@@ -17,4 +17,17 @@ public class TelemetryThread extends Thread {
         int memoryUsage = 40 + (step * 5);
         return "CPU Usage: " + cpuUsage + "% | Memory Usage: " + memoryUsage + "%";
     }
+
+    @Override
+    public void run() {
+        for (int i = 1; i <= iterations; i++) {
+            System.out.println("[" + getName() + "] Health Update #" + i + ": " + getSystemHealthMetrics(i));
+            try {
+                Thread.sleep(sleepDurationMs);
+            } catch (InterruptedException e) {
+                System.err.println("[" + getName() + "] Telemetry thread interrupted: " + e.getMessage());
+                interrupt();
+            }
+        }
+    }
 }
