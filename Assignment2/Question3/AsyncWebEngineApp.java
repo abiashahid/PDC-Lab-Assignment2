@@ -12,5 +12,14 @@ public class AsyncWebEngineApp {
         // Instantiating LogProcessorTask and wrapping in Thread with custom name
         LogProcessorTask logTask = new LogProcessorTask();
         Thread logThread = new Thread(logTask, "Log-Worker");
+
+        // Pre-start state logging
+        System.out.println("[PRE-START] " + telemetryThread.getName() + " State: " + telemetryThread.getState() + " | Is Alive: " + telemetryThread.isAlive());
+        System.out.println("[PRE-START] " + logThread.getName() + " State: " + logThread.getState() + " | Is Alive: " + logThread.isAlive());
+
+        // Simultaneous execution launch
+        System.out.println("\n--- Launching Concurrent Operations ---");
+        telemetryThread.start();
+        logThread.start();
     }
 }
