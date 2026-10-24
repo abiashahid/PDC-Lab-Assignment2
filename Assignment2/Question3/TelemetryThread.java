@@ -11,4 +11,10 @@ public class TelemetryThread extends Thread {
     public TelemetryThread(String name) {
         super(name);
     }
+
+    private String getSystemHealthMetrics(int step) {
+        int cpuUsage = 20 + (step * 7);
+        int memoryUsage = 40 + (step * 5);
+        return "CPU Usage: " + cpuUsage + "% | Memory Usage: " + memoryUsage + "%";
+    }
 }
