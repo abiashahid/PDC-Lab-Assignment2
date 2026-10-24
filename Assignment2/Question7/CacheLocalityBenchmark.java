@@ -16,6 +16,15 @@ public class CacheLocalityBenchmark {
         System.out.println("\n--- Execution Metrics ---");
         System.out.printf("Row-Major Access Time:    %.3f ms\n", rowMajorTime / 1e6);
         System.out.printf("Column-Major Access Time: %.3f ms\n", colMajorTime / 1e6);
+
+        logMemoryFootprint();
+    }
+
+    private static void logMemoryFootprint() {
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc();
+        long usedMemory = runtime.totalMemory() - runtime.freeMemory();
+        System.out.printf("Estimated Heap Footprint: %.2f MB\n", usedMemory / (1024.0 * 1024.0));
     }
 
     private static int[][] initializeMatrix(int size) {
