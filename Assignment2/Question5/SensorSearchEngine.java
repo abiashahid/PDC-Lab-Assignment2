@@ -6,10 +6,17 @@ public abstract class SensorSearchEngine {
     protected int endIdx;
 
     public SensorSearchEngine(double[] sensorData, int startIdx, int endIdx) {
+        if (sensorData == null || startIdx < 0 || endIdx > sensorData.length || startIdx >= endIdx) {
+            throw new IllegalArgumentException("Invalid grid indices or telemetry data array");
+        }
         this.sensorData = sensorData;
         this.startIdx = startIdx;
         this.endIdx = endIdx;
     }
 
     public abstract double processGrid();
+
+    public int getSegmentSize() {
+        return endIdx - startIdx;
+    }
 }
