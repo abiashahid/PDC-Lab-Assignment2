@@ -27,7 +27,6 @@ public class SensorGridMonitorApp {
 
         long startTime = System.nanoTime();
 
-        // Launching parallel min and max reductions across 4 partitioned segments
         for (int i = 0; i < THREAD_COUNT; i++) {
             int start = i * segmentSize;
             int end = (i == THREAD_COUNT - 1) ? DATA_SIZE : (i + 1) * segmentSize;
@@ -43,7 +42,6 @@ public class SensorGridMonitorApp {
             maxThreads[i].start();
         }
 
-        // Wait for all worker threads to finish
         try {
             for (int i = 0; i < THREAD_COUNT; i++) {
                 minThreads[i].join();
@@ -53,5 +51,26 @@ public class SensorGridMonitorApp {
             System.err.println("Thread execution interrupted: " + e.getMessage());
             Thread.currentThread().interrupt();
         }
+
+        long executionTime = System.nanoTime() - startTime;
+
+        // Reduce segment results to find global min and max
+        double globalMin = Double.MAX_VALUE;
+        double globalMax = -Double.MAX_VALUE;
+
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            if (minTasks[i].getResultMin() < globalMin) {
+                globalMin = minTasks[i].getResultMin();
+            }
+            if (maxTasks[i].getResultMax() > globalMax) {
+                globalMax = maxTasks[i].getResultMax();
+            }
+        }
+
+        System.out.println("\n--- Parallel Anomaly Detection Results ---");
+        System.out.printf("Global Minimum Recorded Value: %.2f\n", globalMin);
+        System.out.printf("Global Peak Vibration Spike:   %.2f\n", globalMax);
+        System.out.printf("Parallel Sensor Grid Reduction Time: %.3f ms\n", executionTime / 1e6);
+        System.out.println("==================================================");
     }
 }
