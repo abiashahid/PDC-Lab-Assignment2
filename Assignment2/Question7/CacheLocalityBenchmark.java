@@ -9,6 +9,13 @@ public class CacheLocalityBenchmark {
         
         int[][] matrix = initializeMatrix(MATRIX_SIZE);
         System.out.println("Matrix allocated and initialized successfully.");
+
+        long rowMajorTime = measureRowMajorTraversal(matrix);
+        long colMajorTime = measureColumnMajorTraversal(matrix);
+
+        System.out.println("\n--- Execution Metrics ---");
+        System.out.printf("Row-Major Access Time:    %.3f ms\n", rowMajorTime / 1e6);
+        System.out.printf("Column-Major Access Time: %.3f ms\n", colMajorTime / 1e6);
     }
 
     private static int[][] initializeMatrix(int size) {
