@@ -24,6 +24,12 @@ public class PortfolioThresholdTask extends RecursiveAction {
                     assetValues[i] *= 0.95; // 5% volatility stress-test penalty
                 }
             }
+        } else {
+            int mid = start + (end - start) / 2;
+            PortfolioThresholdTask leftTask = new PortfolioThresholdTask(assetValues, start, mid, riskCap);
+            PortfolioThresholdTask rightTask = new PortfolioThresholdTask(assetValues, mid, end, riskCap);
+
+            invokeAll(leftTask, rightTask);
         }
     }
 }
