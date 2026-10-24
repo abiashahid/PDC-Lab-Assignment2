@@ -32,4 +32,16 @@ public class CacheLocalityBenchmark {
         long duration = System.nanoTime() - startTime;
         return duration;
     }
+
+    private static long measureColumnMajorTraversal(int[][] matrix) {
+        long startTime = System.nanoTime();
+        long sum = 0;
+        for (int j = 0; j < MATRIX_SIZE; j++) {
+            for (int i = 0; i < MATRIX_SIZE; i++) {
+                sum += matrix[i][j];
+            }
+        }
+        long duration = System.nanoTime() - startTime;
+        return duration;
+    }
 }
