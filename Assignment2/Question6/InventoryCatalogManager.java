@@ -19,4 +19,12 @@ public class InventoryCatalogManager {
         }
         return Collections.synchronizedMap(map);
     }
+
+    public Map<String, Integer> createConcurrentMap() {
+        Map<String, Integer> map = new ConcurrentHashMap<>();
+        for (int i = 0; i < totalItems; i++) {
+            map.put("PROD_" + i, 100);
+        }
+        return map;
+    }
 }
