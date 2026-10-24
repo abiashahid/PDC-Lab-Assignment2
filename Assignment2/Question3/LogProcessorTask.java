@@ -6,6 +6,8 @@ public class LogProcessorTask implements Runnable {
 
     @Override
     public void run() {
-        // Will be implemented in upcoming commit
+        for (int i = 1; i <= iterations; i++) {
+            System.out.println("[" + Thread.currentThread().getName() + "] Log Metric Iteration: " + i + "/5");
+        }
     }
 }
