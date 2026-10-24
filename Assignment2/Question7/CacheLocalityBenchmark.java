@@ -6,5 +6,18 @@ public class CacheLocalityBenchmark {
     public static void main(String[] args) {
         System.out.println("=== Cache Locality & Memory Profiling Benchmark ===");
         System.out.println("Matrix Dimensions: " + MATRIX_SIZE + "x" + MATRIX_SIZE);
+        
+        int[][] matrix = initializeMatrix(MATRIX_SIZE);
+        System.out.println("Matrix allocated and initialized successfully.");
+    }
+
+    private static int[][] initializeMatrix(int size) {
+        int[][] matrix = new int[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                matrix[i][j] = (i + j) % 100;
+            }
+        }
+        return matrix;
     }
 }
