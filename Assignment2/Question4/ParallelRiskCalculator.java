@@ -22,7 +22,16 @@ public class ParallelRiskCalculator extends RecursiveTask<Double> {
                 sum += assetValues[i];
             }
             return sum;
+        } else {
+            int mid = start + (end - start) / 2;
+            ParallelRiskCalculator leftTask = new ParallelRiskCalculator(assetValues, start, mid);
+            ParallelRiskCalculator rightTask = new ParallelRiskCalculator(assetValues, mid, end);
+
+            leftTask.fork();
+            double rightResult = rightTask.compute();
+            double leftResult = leftTask.join();
+
+            return leftResult + rightResult;
         }
-        return 0.0;
     }
 }
