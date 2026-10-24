@@ -20,4 +20,16 @@ public class CacheLocalityBenchmark {
         }
         return matrix;
     }
+
+    private static long measureRowMajorTraversal(int[][] matrix) {
+        long startTime = System.nanoTime();
+        long sum = 0;
+        for (int i = 0; i < MATRIX_SIZE; i++) {
+            for (int j = 0; j < MATRIX_SIZE; j++) {
+                sum += matrix[i][j];
+            }
+        }
+        long duration = System.nanoTime() - startTime;
+        return duration;
+    }
 }
