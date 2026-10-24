@@ -21,5 +21,23 @@ public class AsyncWebEngineApp {
         System.out.println("\n--- Launching Concurrent Operations ---");
         telemetryThread.start();
         logThread.start();
+
+        // Active execution runtime state logging
+        System.out.println("[RUNNING] " + telemetryThread.getName() + " State: " + telemetryThread.getState() + " | Is Alive: " + telemetryThread.isAlive());
+        System.out.println("[RUNNING] " + logThread.getName() + " State: " + logThread.getState() + " | Is Alive: " + logThread.isAlive());
+
+        // Synchronization barrier waiting for threads to finish execution
+        try {
+            telemetryThread.join();
+            logThread.join();
+        } catch (InterruptedException e) {
+            System.err.println("Main thread interrupted while waiting for worker completion: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
+
+        System.out.println("\n--- Execution Finished ---");
+        System.out.println("[POST-EXECUTION] " + telemetryThread.getName() + " State: " + telemetryThread.getState() + " | Is Alive: " + telemetryThread.isAlive());
+        System.out.println("[POST-EXECUTION] " + logThread.getName() + " State: " + logThread.getState() + " | Is Alive: " + logThread.isAlive());
+        System.out.println("Telemetry engine shut down gracefully.");
     }
 }
