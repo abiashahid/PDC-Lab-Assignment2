@@ -30,6 +30,25 @@ public class ForkJoinPortfolioApp {
         System.out.printf("Calculated Total Risk Score: $%.2f\n", initialRiskScore);
         System.out.printf("Execution Time: %.3f ms\n", riskCalcTime / 1e6);
 
+        // Phase 2: In-Place Volatility Stress-Test Penalty Application
+        startTime = System.nanoTime();
+        PortfolioThresholdTask stressTask = new PortfolioThresholdTask(assets, 0, assets.length, RISK_CAP);
+        pool.invoke(stressTask);
+        long stressTestTime = System.nanoTime() - startTime;
+
+        System.out.printf("\n--- Phase 2: Volatility Stress-Test Adjustment ---\n");
+        System.out.printf("Applied 5%% penalty to assets exceeding Risk Cap ($%.2f)\n", RISK_CAP);
+        System.out.printf("Stress-Test Execution Time: %.3f ms\n", stressTestTime / 1e6);
+
+        // Phase 3: Post-Adjustment Recalculation
+        ParallelRiskCalculator adjustedRiskTask = new ParallelRiskCalculator(assets, 0, assets.length);
+        double adjustedRiskScore = pool.invoke(adjustedRiskTask);
+
+        System.out.printf("\n--- Phase 3: Re-evaluated Metrics ---\n");
+        System.out.printf("Adjusted Total Risk Score: $%.2f\n", adjustedRiskScore);
+        System.out.printf("Total Pipeline Execution Time: %.3f ms\n", (riskCalcTime + stressTestTime) / 1e6);
+        System.out.println("======================================================");
+
         pool.close();
     }
 }
