@@ -26,4 +26,16 @@ public class PacketSymmetryAuditor {
 
         return true;
     }
+
+    public static void main(String[] args) {
+        System.out.println("=== Network Packet Symmetry Auditor ===");
+
+        String[] incoming = {"PKT_A", "PKT_B", "PKT_C"};
+        String[] outgoing = {"PKT_C", "PKT_B", "PKT_A"};
+
+        System.out.println("Auditing symmetry between incoming and outgoing streams...");
+        boolean isSymmetrical = auditSymmetry(incoming, outgoing);
+
+        System.out.println("Audit Result - Packet Streams Symmetrical: " + isSymmetrical);
+    }
 }
